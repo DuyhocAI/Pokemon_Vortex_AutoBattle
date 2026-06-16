@@ -1,0 +1,19 @@
+# Browser automation
+playwright>=1.44.0
+
+# Config & logging
+python-dotenv>=1.0.0
+loguru>=0.7.2
+
+# HTTP client (PokeAPI lookups + Ollama LLM calls)
+httpx>=0.27.0
+
+# Terminal dashboard
+rich>=13.7.0
+
+# System monitor (CPU/RAM/GPU panel)
+psutil>=5.9.0
+
+# Web dashboard (FastAPI + WebSocket)
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0

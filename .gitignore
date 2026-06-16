@@ -1,0 +1,48 @@
+# ── Secrets & credentials ──────────────────────────────
+.env
+*.env
+!.env.example
+
+# ── Python ─────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+venv/
+.venv/
+env/
+ENV/
+
+# ── Runtime data (personal grind history / session) ────
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# ── Logs ───────────────────────────────────────────────
+logs/
+*.log
+
+# ── Saved game-page fixtures (chứa dữ liệu tài khoản cá nhân,
+#    giữ lại trên máy để test offline nhưng KHÔNG publish) ─
+*.html
+!web/index.html
+
+# ── Reverse-engineered site assets (bản quyền của site) ─
+pv_functions.js
+*.user.js
+
+# ── Editor / IDE / OS ──────────────────────────────────
+.claude/
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ── Screenshots / debug artifacts ──────────────────────
+debug_*.png
+*.tmp

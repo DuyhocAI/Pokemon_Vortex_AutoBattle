@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokémon Vortex Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="topbar">
+  <div class="brand">
+    <div class="pokeball" id="pokeballSpin"><div class="pokeball-band"></div><div class="pokeball-btn"></div></div>
+    <div class="brand-text">
+      <h1>POKÉMON <span>VORTEX</span> AGENT</h1>
+      <p id="zoneInfo">zone: ? · tile: ?</p>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="pill" id="screenPill">starting</div>
+    <div class="pill pill-mode" id="modePill">mode: ?</div>
+    <div class="pill" id="uptimePill">⏱ 00:00:00</div>
+    <div class="status-pill running" id="statusPill"><span class="dot"></span>RUNNING</div>
+  </div>
+</header>
+
+<div class="rare-banner hidden" id="rareBanner">
+  ✨ RARE POKÉMON XUẤT HIỆN — <b id="rareName"></b> — gõ <code>catch</code> / <code>battle</code> / <code>skip</code> ✨
+</div>
+
+<!-- ═══════════ MAIN GRID ═══════════ -->
+<main class="grid">
+
+  <!-- ── BATTLE ARENA ── -->
+  <section class="card arena-card">
+    <div class="card-head">
+      <h2>⚔️ BATTLE ARENA</h2>
+      <span class="phase-badge" id="phaseBadge">đang tìm pokémon…</span>
+    </div>
+    <div class="arena" id="arena">
+      <div class="arena-empty" id="arenaEmpty">
+        <div class="grass-anim">🌿</div>
+        <p>Đang đi tìm Pokémon hoang dã…</p>
+      </div>
+      <div class="arena-field hidden" id="arenaField">
+        <!-- enemy -->
+        <div class="fighter enemy">
+          <div class="fighter-info">
+            <div class="fighter-name"><span id="enemyVariant" class="variant-tag hidden"></span><span id="enemyName">?</span><span class="lv" id="enemyLv"></span></div>
+            <div class="hpbar"><div class="hpbar-fill" id="enemyHpBar" style="width:100%"></div></div>
+            <div class="hp-text" id="enemyHpText"></div>
+          </div>
+          <img class="sprite" id="enemySprite" src="" alt="">
+        </div>
+        <!-- my pokemon -->
+        <div class="fighter mine">
+          <img class="sprite sprite-back" id="mySprite" src="" alt="">
+          <div class="fighter-info">
+            <div class="fighter-name"><span id="myName">?</span><span class="lv" id="myLv"></span></div>
+            <div class="hpbar"><div class="hpbar-fill mine-fill" id="myHpBar" style="width:100%"></div></div>
+            <div class="hp-text" id="myHpText"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="moves-row" id="movesRow"></div>
+    <div class="battle-output" id="battleOutput"></div>
+  </section>
+
+  <!-- ── STATS ── -->
+  <section class="card stats-card">
+    <div class="card-head"><h2>📊 THỐNG KÊ</h2><span class="sub" id="statsScope">lifetime + session</span></div>
+    <div class="winrate-wrap">
+      <svg viewBox="0 0 120 120" class="donut">
+        <circle cx="60" cy="60" r="50" class="donut-bg"/>
+        <circle cx="60" cy="60" r="50" class="donut-fill" id="donutFill" stroke-dasharray="0 314"/>
+      </svg>
+      <div class="winrate-center">
+        <div class="winrate-num" id="winrateNum">–</div>
+        <div class="winrate-label">tỉ lệ thắng</div>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-num" id="statBattles">0</div><div class="stat-label">Trận</div></div>
+      <div class="stat win"><div class="stat-num" id="statWins">0</div><div class="stat-label">Thắng</div></div>
+      <div class="stat lose"><div class="stat-num" id="statLosses">0</div><div class="stat-label">Thua</div></div>
+      <div class="stat catch"><div class="stat-num" id="statCatches">0</div><div class="stat-label">Bắt được</div></div>
+    </div>
+    <div class="session-line" id="sessionLine">Phiên này: 0 trận · 0 thắng</div>
+    <h3 class="mini-head">ĐỐI THỦ KHÓ NHẤT</h3>
+    <div class="hardest-list" id="hardestList"><span class="dim">chưa có dữ liệu</span></div>
+  </section>
+
+  <!-- ── TEAM ── -->
+  <section class="card team-card">
+    <div class="card-head">
+      <h2>🎒 ĐỘI HÌNH</h2>
+      <button class="btn btn-small" onclick="sendCommand('team')">↻ Tải lại</button>
+    </div>
+    <div class="team-grid" id="teamGrid">
+      <div class="dim" style="padding:18px">Đang tải đội hình…</div>
+    </div>
+  </section>
+
+  <!-- ── TEAM OPTIMIZER ── -->
+  <section class="card opt-card">
+    <div class="card-head">
+      <h2>🧠 ĐỘI HÌNH TỐI ƯU <span class="sub">(LLM)</span></h2>
+      <button class="btn btn-accent btn-small" onclick="sendCommand('optimize')">⚡ Phân tích</button>
+    </div>
+    <div class="opt-body" id="optBody">
+      <span class="dim">Bấm <b>Phân tích</b> để LLM đánh giá type coverage, điểm yếu đội hình
+      và đề xuất thay đổi dựa trên lịch sử thắng/thua + bài học từ các trận thua.</span>
+    </div>
+  </section>
+
+  <!-- ── GAME LOG ── -->
+  <section class="card log-card">
+    <div class="card-head"><h2>📜 GAME LOG</h2></div>
+    <div class="log-feed" id="logFeed"></div>
+  </section>
+
+  <!-- ── CHAT ── -->
+  <section class="card chat-card">
+    <div class="card-head"><h2>💬 CHAT VỚI AGENT</h2></div>
+    <div class="chat-feed" id="chatFeed">
+      <div class="chat-msg agent">Xin chào! Mình là Vortex Agent 🤖<br>
+      Hỏi mình bất cứ điều gì về trận đấu, đội hình, hoặc ra lệnh trực tiếp
+      (vd: <i>"ưu tiên bắt pokemon hiếm"</i>, <i>"info Garchomp"</i>, <i>"stats"</i>).</div>
+    </div>
+    <div class="quick-cmds">
+      <button class="chip" onclick="sendCommand('pause')">⏸ Pause</button>
+      <button class="chip" onclick="sendCommand('resume')">▶ Resume</button>
+      <button class="chip" onclick="sendCommand('catch')">🔴 Catch</button>
+      <button class="chip" onclick="sendCommand('skip')">⏭ Skip</button>
+      <button class="chip" onclick="sendCommand('stats')">📊 Stats</button>
+      <button class="chip" onclick="sendCommand('mode battle')">⚔ Battle</button>
+      <button class="chip" onclick="sendCommand('mode catch')">🥎 Catch mode</button>
+    </div>
+    <form class="chat-input-row" id="chatForm">
+      <input type="text" id="chatInput" placeholder="Nhắn cho agent… (Enter để gửi)" autocomplete="off">
+      <button type="submit" class="btn btn-accent">Gửi</button>
+    </form>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span class="conn-status" id="connStatus">● đang kết nối…</span>
+  <span>Pokémon Vortex Agent — LLM-powered grind bot · qwen3 @ Ollama</span>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
