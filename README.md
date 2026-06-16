@@ -36,8 +36,8 @@ engine, an LLM "brain" for strategy, and a live Pokémon-themed dashboard.
 ### Windows (PowerShell)
 
 ```powershell
-git clone <your-repo-url> Pokemon_Agent
-cd Pokemon_Agent
+git clone https://github.com/DuyhocAI/Pokemon_Vortex_AutoBattle.git
+cd Pokemon_Vortex_AutoBattle
 ./setup.ps1          # creates venv, installs deps + Playwright Chromium, copies .env
 ```
 
